@@ -12,13 +12,13 @@ echo "Please enter DB password:"
 read -s mysql_root_password
 
 VALIDATE(){
-if [ $1 -ne 0 ]
-then
-    echo -e "$2...$R FAILURE $N"
-    exit 1
-else
-    echo -e "$2...$G SUCCESS $N"
-fi
+   if [ $1 -ne 0 ]
+   then
+        echo -e "$2...$R FAILURE $N"
+        exit 1
+    else
+        echo -e "$2...$G SUCCESS $N"
+    fi
 }
 
 if [ $USERID -ne 0 ]
@@ -26,8 +26,8 @@ then
     echo "Please run this script with root access."
     exit 1 # manually exit if error comes.
 else
-    echo "You are super user"
-fi 
+    echo "You are super user."
+fi
 
 dnf module disable nodejs -y &>>$LOGFILE
 VALIDATE $? "Disabling default nodejs"
@@ -47,7 +47,7 @@ else
     echo -e "Expense user already created...$Y SKIPPING $N"
 fi
 
-mkdir -p /app
+mkdir -p /app &>>$LOGFILE
 VALIDATE $? "Creating app directory"
 
 curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOGFILE
@@ -77,8 +77,11 @@ VALIDATE $? "Enabling backend"
 dnf install mysql -y &>>$LOGFILE
 VALIDATE $? "Installing MySQL Client"
 
-mysql -h db.chavavenkat.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+mysql -h db.daws78s.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 VALIDATE $? "Schema loading"
 
 systemctl restart backend &>>$LOGFILE
 VALIDATE $? "Restarting Backend"
+
+
+
